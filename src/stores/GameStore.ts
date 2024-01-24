@@ -11,15 +11,20 @@ export const useGameStore = defineStore("GameStore", () => {
     createGame(cardList);
 
   watch(currentDeck, (newValue) => {
-    cardList.value = []
+    resetCardList()
     cardList.value = (createDeck(newValue)).cardList.value
     newPlayer.value = createGame(cardList).newPlayer.value
     startGame = createGame(cardList).startGame
     restartGame = createGame(cardList).restartGame
+
   })
 
   function changeCurrentDeck(deck: string[]) {
     currentDeck.value = deck
+  }
+
+  function resetCardList() {
+    cardList.value = []
   }
 
   return {
@@ -27,6 +32,7 @@ export const useGameStore = defineStore("GameStore", () => {
     cardList,
     newPlayer,
     startGame,
+    resetCardList,
     restartGame,
     changeCurrentDeck,
     matchesFound: createGame(cardList).matchesFound.value,

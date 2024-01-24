@@ -3,31 +3,45 @@ import { storeToRefs } from "pinia";
 import { useGameStore } from "../stores/GameStore";
 
 const gameStore = useGameStore();
-const { newPlayer, currentDeck } = storeToRefs(gameStore);
+const { newPlayer } = storeToRefs(gameStore);
 import halloweenDeck from "../data/halloweenDeck.json";
 import peppaDeck from "../data/peppaDeck.json";
 import { ref } from "vue";
 
-const showSelectDeckSection = ref(false)
+const deckSelected = ref(false)
+const showDeckSelectionSection = ref(true)
 
 const startNewGame = () => {
-  showSelectDeckSection.value = true
-
   if (newPlayer.value) {
     gameStore.startGame();
   } else {
     gameStore.restartGame();
   }
+  showDeckSelectionSection.value = false
+  deckSelected.value = false
 };
+
+const restartNewGame = () => {
+  showDeckSelectionSection.value = true
+  deckSelected.value = false
+  gameStore.resetCardList()
+}
 
 function selectDeck(deck: string[]) {
   gameStore.changeCurrentDeck(deck)
-  startNewGame()
+  deckSelected.value = true
 }
 </script>
 
 <template>
-  <button v-if="newPlayer && !showSelectDeckSection" @click="startNewGame" :class="$style.button">
+  <div v-if="showDeckSelectionSection">
+    <p :class="$style['select-deck-text']">Please Select Deck</p>
+    <div :class="$style['deck-selection']">
+      <button @click="selectDeck(peppaDeck)" :class="$style['deck-selection-button']">Peppa</button>
+      <button @click="selectDeck(halloweenDeck)" :class="$style['deck-selection-button']">Halloween</button>
+    </div>
+  </div>
+  <button v-if="deckSelected" @click="startNewGame" :class="$style.button">
     <div :class="$style['button-icon']">
       <img
         :class="$style['icon-play']"
@@ -41,16 +55,9 @@ function selectDeck(deck: string[]) {
     </div>
     Start Game
   </button>
-  <button v-else @click="startNewGame" :class="$style.button">
+  <button v-if="!showDeckSelectionSection" @click="restartNewGame" :class="$style.button">
     <img src="/images/restart.svg" alt="Restart Icon" />Restart Game
   </button>
-  <div v-if="showSelectDeckSection">
-    <p>Select Deck</p>
-    <div>
-      <button @click="selectDeck(peppaDeck)">Peppa</button>
-      <button @click="selectDeck(halloweenDeck)">Halloween</button>
-    </div>
-  </div>
 </template>
 
 <style module>
@@ -106,5 +113,40 @@ function selectDeck(deck: string[]) {
   position: relative;
   width: 24px;
   height: 24px;
+}
+
+.deck-selection {
+  display: flex;
+  /* flex-direction: row; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.deck-selection-button {
+  background-color: #54972e;
+  color: white;
+  padding: 8px 16px 10px;
+  font-weight: bold;
+  font-family: "Titillium Web", sans-serif;
+  font-weight: bold;
+  font-size: 1rem;
+  border: 0;
+  border-radius: 10px;
+  transition: 0.2s all ease-in;
+  border: 2px solid #54972e;
+}
+
+.deck-selection-button:hover {
+  border: 2px solid #54972e;
+  background-color: transparent;
+}
+
+.select-deck-text {
+  font-weight: bold;
+  font-family: "Titillium Web", sans-serif;
+  font-weight: bold;
 }
 </style>
