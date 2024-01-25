@@ -22,7 +22,6 @@ const startNewGame = () => {
 const restartNewGame = () => {
   showDeckSelectionSection.value = true
   deckSelected.value = false
-  gameStore.resetCardList()
 }
 
 function selectDeck(deck: string[]) {

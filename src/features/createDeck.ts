@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-export interface Card {
+export interface ICard {
   value: string,
   variant: number,
   visible: boolean,
@@ -8,7 +8,7 @@ export interface Card {
   matched: boolean
 }
 
-const cardList = ref<Card[]>([])
+const cardList = ref<ICard[]>([])
 
 const initDeck = (deckData: string[]) => {
   deckData.forEach(item => {
@@ -40,7 +40,9 @@ const updateCardPosition = () => {
 }
 
 export default function createDeck(deckData: string[]) {
-  initDeck(deckData)
+  setTimeout(() => {
+    initDeck(deckData)
+  }, 200)
   updateCardPosition()
 
   return {

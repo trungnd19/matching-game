@@ -7,12 +7,13 @@ import AppFooter from "./components/AppFooter.vue";
 import AppHero from "./components/AppHero.vue";
 import GameBoard from "./components/GameBoard.vue";
 import NewGameButton from "./components/NewGameButton.vue";
+import LoadingView from "./components/LoadingView.vue";
 
 const userSelection = ref([]);
 const userCanFlipCard = ref(true);
 
 const gameStore = useGameStore();
-const { cardList, matchesFound, status } = storeToRefs(gameStore);
+const { cardList, matchesFound, status, showLoading } = storeToRefs(gameStore);
 
 const flipCard = payload => {
   if (userCanFlipCard.value) {
@@ -73,6 +74,9 @@ watch(
 <template>
   <AppHero />
   <NewGameButton />
+  <Teleport to="body">
+    <LoadingView v-if="showLoading"></LoadingView>
+  </Teleport>
   <GameBoard :cardList="cardList" :status="status" @flip-card="flipCard" />
   <AppFooter />
 </template>

@@ -1,20 +1,21 @@
-<script setup>
+<script setup lang="ts">
+// @ts-ignore
 import Card from "./Card.vue";
+import type { ICard } from "@/features/createDeck";
 
-defineProps({
-  cardList: {
-    type: Array,
-    required: true
-  },
-  status: {
-    type: String,
-    required: true
-  }
-});
+export interface Props {
+  status: string
+  cardList: ICard[]
+}
+
+withDefaults(defineProps<Props>(), {
+  status: '',
+  cardList: () => []
+})
 
 const emits = defineEmits(["flip-card"]);
 
-const selectCard = payload => {
+const selectCard = (payload: ICard) => {
   emits("flip-card", payload);
 };
 </script>
