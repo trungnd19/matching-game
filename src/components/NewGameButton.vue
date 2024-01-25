@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useGameStore } from "../stores/GameStore";
+import { DECK, deckBtnList } from "../data/decks"
+import { ref } from "vue";
 
 const gameStore = useGameStore();
 const { newPlayer } = storeToRefs(gameStore);
-import halloweenDeck from "../data/halloweenDeck.json";
-import peppaDeck from "../data/peppaDeck.json";
-import { ref } from "vue";
-
 const deckSelected = ref(false)
 const showDeckSelectionSection = ref(true)
 
@@ -37,8 +35,12 @@ function selectDeck(deck: string[]) {
   <div v-if="showDeckSelectionSection">
     <p :class="$style['select-deck-text']">Please Select Deck</p>
     <div :class="$style['deck-selection']">
-      <button @click="selectDeck(peppaDeck)" :class="$style['deck-selection-button']">Peppa</button>
-      <button @click="selectDeck(halloweenDeck)" :class="$style['deck-selection-button']">Halloween</button>
+      <button v-for="deckBtn in deckBtnList" 
+        :key="deckBtn.btnText" 
+        @click="selectDeck(deckBtn.deck)" 
+        :class="$style['deck-selection-button']">
+        {{ deckBtn.btnText }}
+      </button>
     </div>
   </div>
   <button v-if="deckSelected" @click="startNewGame" :class="$style.button">

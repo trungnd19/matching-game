@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
 import createDeck from "../features/createDeck";
 import createGame from "../features/createGame";
-import halloweenDeck from "../data/halloweenDeck.json";
+// import halloweenDeck from "../data/halloweenDeck.json";
+import { DECK } from "../data/decks"
 import { ref, watch } from "vue";
 
 export const useGameStore = defineStore("GameStore", () => {
   const currentDeck = ref()
-  const { cardList } = createDeck(halloweenDeck);
+  const { cardList } = createDeck(DECK.HALLOWEEN);
   let { newPlayer, startGame, restartGame, matchesFound, status } =
     createGame(cardList);
 
